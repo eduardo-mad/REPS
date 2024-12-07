@@ -59,9 +59,11 @@ for i in range(pages):
         nombre_completo = nombre_completo + " " + segundo_apellido
         person_data.append(nombre_completo.title())
  
-
-        academicData = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="pestanas"]/ul/li[2]')))
-        academicData.click()
+        try:
+            academicData = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="pestanas"]/ul/li[2]')))
+            academicData.click()
+        except TimeoutException:
+            print("The academicData tab is not visible or does not exist.")
 
         tabs_ul = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="pestanasTitulaciones"]/ul')))
         tab_items = tabs_ul.find_elements(By.TAG_NAME, 'li')
