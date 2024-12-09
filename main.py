@@ -31,12 +31,17 @@ filtrBtn = driver.find_element(By.ID, 'filtro')
 filtrBtn.click()
 time.sleep(2)
 
+table = driver.find_element(By.XPATH, '//*[@id="profesionalTable"]/tbody')
+rows = table.find_elements(By.TAG_NAME, 'tr')
+first_row_data = rows[0].find_element(By.TAG_NAME, 'td').text
+
 pages = int(driver.find_element(By.XPATH, '//*[@id="profesionalTable_paginate"]/ul/li[9]/a').text)
 if starting_page > 1:
     for i in range(starting_page):
         nextBtn = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="profesionalTable_next"]/a')))
         nextBtn.click()
-time.sleep(starting_page * 0.5) # Se puede cambiar el tiempo según cuantas paginas, puede dar problema cuando se encuentren en miles. Llegar a la página 1000 tomo aproximadamente 6:40 minutos
+
+WebDriverWait(driver, 6000).until(lambda driver: driver.find_element(By.XPATH, '//*[@id="profesionalTable"]/tbody/tr[1]/td').text != first_row_data) #Cambiar el número según sea necesario
 
 for i in range(pages):
     page_number = starting_page
